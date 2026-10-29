@@ -44,7 +44,7 @@
 -->
 - [ ] **No** — this change does not modify an NSC or network connection.
 - [ ] **Yes** — this change modifies an NSC or network connection.
- - Affected resources:
+  - Affected resources:
   - [ ] No inbound rule allows 0.0.0.0/0 or ::/0, except on the public entry points in VNE-SEC-POL-041 section 7.2
   - [ ] The source is the minimum required (a security group ID rather than a CIDR when the source is inside AWS)
   - [ ] Each allowed service, protocol and port has a business justification recorded in VNE-SEC-NET-001
