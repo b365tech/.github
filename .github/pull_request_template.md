@@ -13,8 +13,10 @@
 ## Ticket
 <!--
   Link the originating ticket:
-  - project work → ClickUp task, e.g. https://app.clickup.com/t/86xxxxxxx
-  - operational change → help desk ticket, e.g. a Freshservice or Jira Service Management ticket URL
+  - infrastructure, NSC or emergency change → Jira "Change & Access Requests" ticket
+    (issue type Infrastructure Change)
+  - project work → Jira issue (if it needs an infrastructure or NSC change, also link the
+    Change & Access Requests ticket)
   More than one link is fine.
 -->
 
@@ -32,6 +34,22 @@
 - [ ] **No security impact** — [reason]
 
 
+## NSC Change (PCI DSS 1.2.2)
+<!--
+  Tick exactly one of Yes / No.
+  NSCs and network connections are those recorded in VNE-SEC-NET-001: security groups, route
+  tables, VPC endpoints, payment brand connections, load balancer listeners, AWS WAF rules,
+  Istio and OPA-Istio policies.
+  If YES: tick every item. The reviewer confirms each one before approving.
+-->
+- [ ] **No** — this change does not modify an NSC or network connection.
+- [ ] **Yes** — this change modifies an NSC or network connection.
+ - Affected resources:
+  - [ ] No inbound rule allows 0.0.0.0/0 or ::/0, except on the public entry points in VNE-SEC-POL-041 section 7.2
+  - [ ] The source is the minimum required (a security group ID rather than a CIDR when the source is inside AWS)
+  - [ ] Each allowed service, protocol and port has a business justification recorded in VNE-SEC-NET-001
+
+
 ## Significant Change (PCI DSS 6.5.2)
 <!--
   A significant change is any of the following:
@@ -44,7 +62,7 @@
   - any change to a third-party service provider supporting the CDE
 
   Tick exactly one of Yes / No.
-  If YES: link the post-change confirmation ticket (ClickUp or help desk) and tick every item below to confirm
+  If YES: link the Jira ticket where the DevSecOps Lead records the post-change confirmation and tick every item below to confirm
   it is covered by that ticket. Where an item does not apply, record "N/A" and the reason
   in the ticket, then tick it here.
 -->
@@ -52,7 +70,7 @@
 - [ ] **Yes** — this is a significant change.
   - Post-change confirmation ticket:
   - [ ] Applicable PCI DSS requirements confirmed in place on all new or changed systems and networks (6.5.2)
-  - [ ] Documentation updated: network diagram (1.2.3), data-flow diagram (1.2.4), system component inventory (12.5.1), hardening standard and primary functions (2.2)
+  - [ ] Documentation updated: network diagram (1.2.3), data-flow diagram (1.2.4), system component inventory VNE-SEC-INV-001 (12.5.1), VNE-SEC-NET-001 if NSCs changed, VNE-SEC-CRY-001 if keys or cryptography changed, hardening standard (2.2)
   - [ ] Internal and external vulnerability scans after the change (11.3.1.3, 11.3.2.1)
   - [ ] Penetration test after a significant infrastructure or application upgrade or change (11.4.2, 11.4.3)
   - [ ] Segmentation testing if segmentation controls changed (11.4.5)
@@ -63,6 +81,7 @@
 <!--
   Describe the tests run in dev beyond the automated PR checks
   e.g. manual or integration testing, environments used, results.
+  Include ZeroPath results and, for CDK changes, the CDK snapshot diff.
 -->
 
 
@@ -76,4 +95,4 @@
 
 ## Test Data Confirmation (CDE repos only)
 <!-- CDE repositories: tick the box. Non-CDE repositories: leave unticked and write "N/A — non-CDE repository". -->
-- [ ] I confirm no real CHD or test credentials exist in this change.
+- [ ] I confirm no real account data, test credentials or test accounts exist in this change.
